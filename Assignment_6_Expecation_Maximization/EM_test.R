@@ -391,6 +391,18 @@ simGMMData <- function(mu, sigma, pi, n){
 
 #E-step
 
+for(i in 1:3)  # This line initializes the for loop to begin running
+               # through the each of the three parameters
+  
+  for(j in 1:n)
+    
+    pdf_gmm <- (1/sqrt(((2*pi)^2)*det(sigma[i])))*exp^(-0.5*t(x[j]-mu[i])%*%((1/det(sigma[i]))*sigma[i])%*%(x[j]-mu[i]))  # This line defines the PDF of the
+                                                                                                                          # bivariate normal distribution.
+
+    
+
 #M-step
 
+
 #Convergence Check
+
