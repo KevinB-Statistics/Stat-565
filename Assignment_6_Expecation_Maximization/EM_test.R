@@ -411,7 +411,7 @@ n <- nrow(output)  # Number of data points
 k <- 3  # Number of components
 
 # Initial mixing coefficients
-pi <- rep(1/k, k)
+pi_gmm <- rep(1/k, k)
 
 # Initial mean vectors (randomly selected from data)
 mu <- output[sample(1:n, k), ]
