@@ -434,14 +434,14 @@ for(i in 1:3)  # This line initializes the for loop to begin running
     pdf_gmm <- (1/sqrt(((2*pi)^2)*det(sigma[i])))*exp^(-0.5*t(x[j]-mu[i])%*%((1/det(sigma[i]))*sigma[i])%*%(x[j]-mu[i]))  # This line defines the PDF of the
                                                                                                                           # bivariate normal distribution.
 
-    delta <- pdf_gmm*pi[i]/sum(pdf_gmm*pi[i])  # This line defines the probability that the data point
+    delta <- pdf_gmm*pi_gmm[i]/sum(pdf_gmm*pi_gmm[i])  # This line defines the probability that the data point
                                                # x_j belongs to the ith component.
     
-    pi[i] <- mean(delta)
+    pi[i] <- mean(delta)  # This line updates the mixture probabilities.
     
-    mu[i] <- sum(delta*x[j])/sum(delta)
+    mu[i] <- sum(delta*x[j])/sum(delta)  # This line updates the means.
     
-    sigma[i] <- sum(delta*(x[j]-mu[i])%*%t(x[j]-mu[i]))/sum(delta)
+    sigma[i] <- sum(delta*(x[j]-mu[i])%*%t(x[j]-mu[i]))/sum(delta)  # This line updates the covariance matrices.
 
 #M-step
 
