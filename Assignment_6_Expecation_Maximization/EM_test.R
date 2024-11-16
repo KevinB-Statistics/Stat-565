@@ -403,9 +403,8 @@ n = 1000
 sigma = c(sigma1,sigma2,sigma3)
 
 output <- simGMMData(mu, sigma, pi, n)
-
-list1 <- output[[1]]
-list2 <- output[[2]]
+output <- as.data.frame(output)
+View(output)
 #Initialization
 set.seed(123)  # For reproducibility
 n <- nrow(output)  # Number of data points
@@ -415,16 +414,15 @@ k <- 3  # Number of components
 pi <- rep(1/k, k)
 
 # Initial mean vectors (randomly selected from data)
-mu <- data[sample(1:n, k), ]
+mu <- output[sample(1:n, k), ]
 
 # Initial covariance matrices (identity matrices)
-Sigma <- lapply(1:k, function(i) diag(ncol(data)))
+Sigma <- lapply(1:k, function(i) diag(ncol(output)))
 
 # Convergence criteria
 tolerance <- 1e-6
 max_iter <- 100
 log_likelihood <- numeric(max_iter)
-
 
 #E-step
 
