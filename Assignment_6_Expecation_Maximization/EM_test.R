@@ -434,10 +434,9 @@ dMVN <- function(x, mu, sigma) {
   det_sigma <- det(sigma)
   inv_sigma <- solve(sigma)
   const <- (2 * pi)^(-1) * det_sigma^(-0.5)
-  exp_term <- exp(-0.5 * rowSums((x - mu) %*% inv_sigma * (x - mu)))
+  exp_term <- exp(-0.5 * rowSums(as.matrix(x - mu) %*% inv_sigma * (x - mu)))
   return(const * exp_term)
 }
-
 
 #E-step
 
@@ -447,6 +446,9 @@ for(i in 1:3){  # This line initializes the for loop to begin running
   for(j in 1:nrow(x)){  # This line initializes the for loop to begin running
                   # through the n samples.
     
+    #####
+    # Changes to be made: Can replace with a modification with correct indexing of the dMVN function
+    #####
     pdf_gmm <- (1/sqrt(((2*pi)^2)*det(sigma[[i]])))*exp(-0.5*as.matrix(x[j,]-mu[i,])%*%(((1/det(sigma[[i]]))*sigma[[i]])%*%t(x[j,]-mu[i,])))  # This line defines the PDF of the
                                                                                                                           # bivariate normal distribution.
     
