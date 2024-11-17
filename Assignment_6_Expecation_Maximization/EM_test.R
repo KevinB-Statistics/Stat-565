@@ -415,6 +415,7 @@ pi_gmm <- rep(1/k, k)
 
 # Initial mean vectors (randomly selected from data)
 mu <- x[sample(1:n, k), ]
+mu <- as.matrix(mu)
 
 # Initial covariance matrices (identity matrices)
 sigma <- lapply(1:k, function(i) diag(ncol(x)))
@@ -429,22 +430,21 @@ log_likelihood <- numeric(max_iter)
 for(i in 1:3){  # This line initializes the for loop to begin running
                 # through the each of the three parameters.
   
-  for(j in 1:n){  # This line initializes the for loop to begin running
+  for(j in 1:nrow(x)){  # This line initializes the for loop to begin running
                   # through the n samples.
     
-    pdf_gmm <- (1/sqrt(((2*pi)^2)*det(sigma[[i]])))*exp^(-0.5*t(x[j]-mu[[i]])%*%((1/det(sigma[[i]]))*sigma[[i]])%*%(x[j]-mu[[i]]))  # This line defines the PDF of the
+    pdf_gmm <- (1/sqrt(((2*pi)^2)*det(sigma[[i]])))*exp(-0.5*as.matrix(x[j,]-mu[i,])%*%(((1/det(sigma[[i]]))*sigma[[i]])%*%t(x[j,]-mu[i,])))  # This line defines the PDF of the
                                                                                                                           # bivariate normal distribution.
     
     delta <- pdf_gmm*pi_gmm[[i]]/sum(pdf_gmm*pi_gmm[[i]])  # This line defines the probability that the data point
                                                        # x_j belongs to the ith component.
     
-    pi[i] <- mean(delta)  # This line updates the mixture probabilities.
+    pi_gmm[i] <- mean(delta)  # This line updates the mixture probabilities.
     
-    mu[i] <- sum(delta*x[j])/sum(delta)  # This line updates the means.
+    mu[i,] <- sum(delta*x[j,])/sum(delta)  # This line updates the means.
     
-    sigma[i] <- sum(delta*(x[j]-mu[[i]])%*%t(x[j]-mu[[i]]))/sum(delta)  # This line updates the covariance matrices.
-    
-  }
+    sigma[[i]][] <- sum(delta * (as.matrix(x[j, ] - mu[i, ]) %*% t(x[j, ] - mu[i, ]))) / sum(delta) # This line updates the covariance matrices.
+    }
 }
 
 
