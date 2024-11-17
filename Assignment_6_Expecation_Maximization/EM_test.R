@@ -392,7 +392,7 @@ mu2 = c(.2, -7)
 mu3 = c(.1,-.01)
 mu = c(mu1, mu2, mu3)
 
-pi = c(.7,.2,.1) #set selection probabilities 
+pi_data = c(.7,.2,.1) #set selection probabilities 
 
 sigma1 = c(3,2,1.5) #set sigma matrix values
 sigma2 = c(.5,.3,-.35)
@@ -401,23 +401,23 @@ sigma3 = c(.2,5,0)
 n = 1000
 
 sigma = c(sigma1,sigma2,sigma3)
-
-output <- simGMMData(mu, sigma, pi, n)
-output <- as.data.frame(output)
-View(output)
+#################################################################
+x <- simGMMData(mu, sigma, pi_data, n)
+x <- as.data.frame(x)
+View(x)
 #Initialization
 set.seed(123)  # For reproducibility
-n <- nrow(output)  # Number of data points
+n <- nrow(x)  # Number of data points
 k <- 3  # Number of components
 
 # Initial mixing coefficients
 pi_gmm <- rep(1/k, k)
 
 # Initial mean vectors (randomly selected from data)
-mu <- output[sample(1:n, k), ]
+mu <- x[sample(1:n, k), ]
 
 # Initial covariance matrices (identity matrices)
-Sigma <- lapply(1:k, function(i) diag(ncol(output)))
+sigma <- lapply(1:k, function(i) diag(ncol(x)))
 
 # Convergence criteria
 tolerance <- 1e-6
