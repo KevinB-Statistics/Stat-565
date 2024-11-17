@@ -426,48 +426,79 @@ max_iter <- 100
 log_likelihood <- numeric(max_iter)
 
 # Function for getting density of GMM of bivariate 
+# Corrected dMVN function
 dMVN <- function(x, mu, sigma) {
-  
   if (ncol(x) != 2){
     stop("Not bivariate data")
   }
   det_sigma <- det(sigma)
+  if(det_sigma <= 0) {
+    det_sigma <- 1e-6  # Avoids issues
+  }
   inv_sigma <- solve(sigma)
   const <- (2 * pi)^(-1) * det_sigma^(-0.5)
-  exp_term <- exp(-0.5 * rowSums(as.matrix(x - mu) %*% inv_sigma * (x - mu)))
+  x_minus_mu <- sweep(x, 2, mu, "-")  # x - mu
+  dist_sq <- rowSums((x_minus_mu %*% inv_sigma) * x_minus_mu)
+  exp_term <- exp(-0.5 * dist_sq)
   return(const * exp_term)
 }
 
-#E-step
-
-for(i in 1:3){  # This line initializes the for loop to begin running
-                # through the each of the three parameters.
+for (iter in 1:max_iter) {
+  # E-step: Calculate mixture probabilities
+  delta <- matrix(0, nrow = n, ncol = k)
+  for (j in 1:k) {
+    delta[, j] <- pi_gmm[j] * dMVN(x, as.matrix(mu[j, ]), sigma[[j]])
+  }
   
-  for(j in 1:nrow(x)){  # This line initializes the for loop to begin running
-                  # through the n samples.
+  # This line defines the probability that the data point
+  # x_j belongs to the ith component. Normalized so each row sums to 1 
+  delta <- delta / rowSums(delta)
+  
+  # M-step: Update parameters
+  N_k <- colSums(delta)
+  pi_gmm <- N_k / n
+  
+  for (j in 1:k) {
+    # This line updates the means.
+    mu[j, ] <- colSums(delta[, j] * x) / N_k[j]
     
-    #####
-    # Changes to be made: Can replace with a modification with correct indexing of the dMVN function
-    #####
-    pdf_gmm <- (1/sqrt(((2*pi)^2)*det(sigma[[i]])))*exp(-0.5*as.matrix(x[j,]-mu[i,])%*%(((1/det(sigma[[i]]))*sigma[[i]])%*%t(x[j,]-mu[i,])))  # This line defines the PDF of the
-                                                                                                                          # bivariate normal distribution.
+    # Center data
+    x_centered <- sweep(x, 2, mu[j, ], "-")
     
-    delta <- pdf_gmm*pi_gmm[[i]]/sum(pdf_gmm*pi_gmm[[i]])  # This line defines the probability that the data point
-                                                       # x_j belongs to the ith component.
-    
-    pi_gmm[i] <- mean(delta)  # This line updates the mixture probabilities.
-    
-    mu[i,] <- sum(delta*x[j,])/sum(delta)  # This line updates the means.
-    
-    sigma[[i]][] <- sum(delta * (as.matrix(x[j, ] - mu[i, ]) %*% t(x[j, ] - mu[i, ]))) / sum(delta) # This line updates the covariance matrices.
-    }
+    # This line updates the covariance matrices.
+    sigma[[j]] <- (t(x_centered * delta[, j]) %*% x_centered) / N_k[j] 
+  }
+  # Compute log-likelihood
+  # @Note: Not sure where to go with this
+  # Check for convergence
+  # @Note: difference between iteration log-likelihoods and less than tolerance
 }
 
 
-#M-step
 
+# @Note: I reorganized and simplified our long expression 
 
+# for(i in 1:3){  # This line initializes the for loop to begin running
+#                 # through the each of the three parameters.
+#   for(j in 1:nrow(x)){  # This line initializes the for loop to begin running
+#                   # through the n samples.
+#     
+#     #####
+#     # Changes to be made: Can replace with a modification with correct indexing of the dMVN function
+#     #####
+#     pdf_gmm <- (1/sqrt(((2*pi)^2)*det(sigma[[i]])))*exp(-0.5*as.matrix(x[j,]-mu[i,])%*%(((1/det(sigma[[i]]))*sigma[[i]])%*%t(x[j,]-mu[i,])))  # This line defines the PDF of the
+#                                                                                                                           # bivariate normal distribution.
+#     
+#     delta <- pdf_gmm*pi_gmm[[i]]/sum(pdf_gmm*pi_gmm[[i]])  # This line defines the probability that the data point
+#                                                        # x_j belongs to the ith component.
+#     
+#     pi_gmm[i] <- mean(delta)  # This line updates the mixture probabilities.
+#     
+#     mu[i,] <- sum(delta*x[j,])/sum(delta)  # This line updates the means.
+#     
+#     sigma[[i]][] <- sum(delta * (as.matrix(x[j, ] - mu[i, ]) %*% t(x[j, ] - mu[i, ]))) / sum(delta) # This line updates the covariance matrices.
+#     }
+# }
 
-#Convergence Check
 
 
