@@ -425,6 +425,20 @@ tolerance <- 1e-6
 max_iter <- 100
 log_likelihood <- numeric(max_iter)
 
+# Function for getting density of GMM of bivariate 
+dMVN <- function(x, mu, sigma) {
+  
+  if (ncol(x) != 2){
+    stop("Not bivariate data")
+  }
+  det_sigma <- det(sigma)
+  inv_sigma <- solve(sigma)
+  const <- (2 * pi)^(-1) * det_sigma^(-0.5)
+  exp_term <- exp(-0.5 * rowSums((x - mu) %*% inv_sigma * (x - mu)))
+  return(const * exp_term)
+}
+
+
 #E-step
 
 for(i in 1:3){  # This line initializes the for loop to begin running
