@@ -469,23 +469,29 @@ for (iter in 1:max_iter) {
     sigma[[j]] <- (t(x_centered * delta[, j]) %*% x_centered) / N_k[j]
     
     # Convergence Check
+    #@Note: Kevin and I decided we needed to use the log-likelihood to check convergence
+    #       update the parameters since there are three parameters.
     
-    if(abs(mu[j+1, ] - mu[j, ]) >= tolerance){  # This line checks convergence of mu
-      
-      mu[j, ] <- mu[j+1, ]  # This line updates mu if the difference of the current
-                            # mu with the previous mu is still greater than the tolerance.
-    }
     
-    if(abs(sigma[[j+1]] - sigma[[j]]) >= tolerance){  # This line checks convergence of sigma
-      
-      sigma[[j]] <- sigma[[j+1]]  # This line hopefully updates sigma if the convergence check
-                                  # hasn't been met yet.
-    }
     
-    if(abs(mu[j+1, ] - mu[j, ]) >= tolerance){  # This line checks convergence of pi
-      
-      mu[j, ] <- mu[j+1, ]
-    }
+    #@Note: The following checks are absolutely useless.
+    
+    #if(abs(mu[j+1, ] - mu[j, ]) >= tolerance){  # This line checks convergence of mu
+    #  
+    #  mu[j, ] <- mu[j+1, ]  # This line updates mu if the difference of the current
+    #                        # mu with the previous mu is still greater than the tolerance.
+    #}
+    #
+    #if(abs(sigma[[j+1]] - sigma[[j]]) >= tolerance){  # This line checks convergence of sigma
+    #  
+    #  sigma[[j]] <- sigma[[j+1]]  # This line hopefully updates sigma if the convergence check
+    #                              # hasn't been met yet.
+    #}
+    #
+    #if(abs(mu[j+1, ] - mu[j, ]) >= tolerance){  # This line checks convergence of pi
+    #  
+    #  mu[j, ] <- mu[j+1, ]
+    #}
     
   }
   # Compute log-likelihood
