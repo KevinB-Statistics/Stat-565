@@ -178,7 +178,7 @@ density.hist(simulated_data, x = "X1", y = "X2")
 # TEST FUNCTION TO DOUBLE CHECK RESULTS
 ############################################################################
 # Fit a GMM using the mclust package
-em_model_test <- Mclust(simulated_data[, c("X1", "X2")])
+em_model_test <- Mclust(x[, c("outputx", "outputy")])
 
 # Display the summary of the fitted model
 summary(em_model_test)
@@ -402,8 +402,8 @@ n = 1000
 
 sigma = c(sigma1,sigma2,sigma3)
 #################################################################
-x <- simGMMData(mu, sigma, pi_data, n, tolerance)
-x <- as.data.frame(x)
+x <- simGMMData(mu, sigma, pi_data, n)
+x <- as.matrix(as.data.frame(x))
 View(x)
 #Initialization
 set.seed(123)  # For reproducibility
@@ -421,9 +421,10 @@ mu <- as.matrix(mu)
 sigma <- lapply(1:k, function(i) diag(ncol(x)))
 
 # Convergence criteria
-#tolerance <- 1e-6  # @Note: User should define the error tolerance
+tolerance <- 1e-6  # @Note: User should define the error tolerance
 max_iter <- 100
 log_likelihood <- numeric(max_iter)
+best_log_likelihood = 0
 
 # Function for getting density of GMM of bivariate 
 # Corrected dMVN function
@@ -446,13 +447,14 @@ dMVN <- function(x, mu, sigma) {
 for (iter in 1:max_iter) {
   # E-step: Calculate mixture probabilities
   delta <- matrix(0, nrow = n, ncol = k)
-  for (j in 1:k) {
+  for (j in 1:3) {
     delta[, j] <- pi_gmm[j] * dMVN(x, as.matrix(mu[j, ]), sigma[[j]])
   }
-  
+  log_likelihood[iter] <- sum(log(rowSums(delta)))
   # This line defines the probability that the data point
   # x_j belongs to the ith component. Normalized so each row sums to 1 
   delta <- delta / rowSums(delta)
+
   
   # M-step: Update parameters
   N_k <- colSums(delta)
@@ -495,15 +497,19 @@ for (iter in 1:max_iter) {
     
   }
   # Compute log-likelihood
+  if (log_likelihood[2]!=0 && abs(log_likelihood[iter] - log_likelihood[iter-1]) <= tolerance){
+    log_likelihood <- log_likelihood[1:iter]
+    break
+  }
   # @Note: Not sure where to go with this
   # Check for convergence
   # @Note: difference between iteration log-likelihoods and less than tolerance
-  
-  
-  
 }
 
-
+log_likelihood
+best_log_likelihood <- max(log_likelihood)
+best_log_likelihood
+print()
 
 # @Note: I reorganized and simplified our long expression 
 
