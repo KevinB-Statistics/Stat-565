@@ -402,7 +402,7 @@ n = 1000
 
 sigma = c(sigma1,sigma2,sigma3)
 #################################################################
-x <- simGMMData(mu, sigma, pi_data, n)
+x <- simGMMData(mu, sigma, pi_data, n, tolerance)
 x <- as.data.frame(x)
 View(x)
 #Initialization
@@ -421,7 +421,7 @@ mu <- as.matrix(mu)
 sigma <- lapply(1:k, function(i) diag(ncol(x)))
 
 # Convergence criteria
-tolerance <- 1e-6
+#tolerance <- 1e-6  # @Note: User should define the error tolerance
 max_iter <- 100
 log_likelihood <- numeric(max_iter)
 
@@ -466,12 +466,35 @@ for (iter in 1:max_iter) {
     x_centered <- sweep(x, 2, mu[j, ], "-")
     
     # This line updates the covariance matrices.
-    sigma[[j]] <- (t(x_centered * delta[, j]) %*% x_centered) / N_k[j] 
+    sigma[[j]] <- (t(x_centered * delta[, j]) %*% x_centered) / N_k[j]
+    
+    # Convergence Check
+    
+    if(abs(mu[j+1, ] - mu[j, ]) >= tolerance){  # This line checks convergence of mu
+      
+      mu[j, ] <- mu[j+1, ]  # This line updates mu if the difference of the current
+                            # mu with the previous mu is still greater than the tolerance.
+    }
+    
+    if(abs(sigma[[j+1]] - sigma[[j]]) >= tolerance){  # This line checks convergence of sigma
+      
+      sigma[[j]] <- sigma[[j+1]]  # This line hopefully updates sigma if the convergence check
+                                  # hasn't been met yet.
+    }
+    
+    if(abs(mu[j+1, ] - mu[j, ]) >= tolerance){  # This line checks convergence of pi
+      
+      mu[j, ] <- mu[j+1, ]
+    }
+    
   }
   # Compute log-likelihood
   # @Note: Not sure where to go with this
   # Check for convergence
   # @Note: difference between iteration log-likelihoods and less than tolerance
+  
+  
+  
 }
 
 
