@@ -469,7 +469,7 @@ for (iter in 1:max_iter) {
     sigma[[j]] <- (t(x_centered * delta[, j]) %*% x_centered) / N_k[j]
     
     # Convergence Check
-    #@Note: Kevin and I decided we needed to use the log-likelihood to check convergence
+    #@Note: Kevin and I (Havilah) decided we needed to use the log-likelihood to check convergence
     #       update the parameters since there are three parameters.
     
     
