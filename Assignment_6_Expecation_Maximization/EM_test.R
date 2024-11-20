@@ -128,7 +128,7 @@ EM <- function(x, tolerance, mu, sigma, pi_gmm, max_iter=1e4){
                       c(var_x1 = sigma[[2]][1,1], var_x2 = sigma[[2]][2,2], cov_x1x2 = sigma[[2]][1,2]),
                       c(var_x1 = sigma[[3]][1,1], var_x2 = sigma[[3]][2,2], cov_x1x2 = sigma[[3]][1,2]))
     
-  pi_gmm_final <- list(pi_1 = pi_gmm[1,], pi_2 = pi_gmm[2,], pi_3 = pi_gmm[3,])
+  pi_gmm_final <- list(pi_1 = pi_gmm[1], pi_2 = pi_gmm[2], pi_3 = pi_gmm[3])
   
   return(c(mu_final, sigma_final, pi_gmm_final))  # This line returns the outputs as a list.
 
