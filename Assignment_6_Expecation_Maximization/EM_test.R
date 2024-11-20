@@ -13,7 +13,7 @@
 #'  \itemize{
 #'    \item Element 1: epsilon as a scalar value representing convergence tolerance.
 #'    \item Element 2: x (numeric matrix) of 1 x n simulated data from sim.GMMdata.R
-#' @param tolerance (epsilon). Numeric value specifying the convergence tolerance for the EM #' algorithm (default = 1e-6).      
+#' @param tolerance (epsilon). Numeric value specifying the convergence tolerance for the EM algorithm (default = 1e-6).      
 #' @param max_iter an integer specifying maximun number of interations (default = 1e4)
 #'
 #'
