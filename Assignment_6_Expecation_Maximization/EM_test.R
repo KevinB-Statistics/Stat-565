@@ -45,7 +45,7 @@
 ############################################################################
 # OUR ACTUAL FUNCTION
 #################################################################
-EM <- function(x, tolerance, mu, sigma, pi_gmm, max_iter=1e4){
+EM <- function(x, tolerance = 1e-6, max_iter = 1e4){
   
   if(typeof(x) != "list"){
     stop("Data must be a list")
@@ -130,7 +130,6 @@ EM <- function(x, tolerance, mu, sigma, pi_gmm, max_iter=1e4){
     
   pi_gmm_final <- list(pi_1 = pi_gmm[1], pi_2 = pi_gmm[2], pi_3 = pi_gmm[3])
   
-  return(c(mu_final, sigma_final, pi_gmm_final))  # This line returns the outputs as a list.
+  return(list(mu_final, sigma_final, pi_gmm_final))  # This line returns the outputs as a list.
 
 }
-
