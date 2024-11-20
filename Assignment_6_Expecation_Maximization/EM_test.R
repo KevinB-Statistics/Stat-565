@@ -124,7 +124,9 @@ EM <- function(x, tolerance, mu, sigma, pi_gmm, max_iter=1e4){
   
   mu_final <- list(mu_1 = mu[1,], mu_2 = mu[2,], mu_3 = mu[3,])
     
-  sigma_final <- list(sigma_1 = sigma[1,], [2,], mu[3,])
+  sigma_final <- list(c(var_x1 = sigma[[1]][1,1], var_x2 = sigma[[1]][2,2], cov_x1x2 = sigma[[1]][1,2]),
+                      c(var_x1 = sigma[[2]][1,1], var_x2 = sigma[[2]][2,2], cov_x1x2 = sigma[[2]][1,2]),
+                      c(var_x1 = sigma[[3]][1,1], var_x2 = sigma[[3]][2,2], cov_x1x2 = sigma[[3]][1,2]))
     
   pi_gmm_final <- list(mu[1,], mu[2,], mu[3,])
   
