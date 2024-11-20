@@ -46,10 +46,12 @@
 #'           \item pi3: scalar, mle of the mixing probability for the third component of GMM.
 #'  
 ############################################################################
+#' 
 #' @examples
-#'     
-#'
-#'
+#'  data <- list(rnorm(100, 0, 1), rnorm(100, 0, 1)) # simulate data   
+#'  result <- EM(x = data, tolerance = 1e-5, max_iter = 1000) # run EM function
+#'  result # review output
+#' 
 ############################################################################
 #'
 #' Begin Function Code
