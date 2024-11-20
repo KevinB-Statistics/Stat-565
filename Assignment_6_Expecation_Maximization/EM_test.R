@@ -1,17 +1,23 @@
-############################################################################
+#' ########## EM Algorithm for Gaussian mixture Model (GMM) ##########
+#' ##############################################################################
 #'
-###############################################################################
-#' EM Algorithm
-###############################################################################
-#' FUNCTION DETAILS.
+#' @description
+#' Implements the Expectation-Maximization (EM) algorithm to estimate parameters of 
+#' a Gaussian Mixture Model (GMM) with three bivariate components.
+#'
+#' ##############################################################################
+#'
+#' @details
 #' Input:
 #'   List of two.
 #'   * Element 1 of the list.
 #'       epsilon: scalar, convergence tolerance.
 #'   * Element 2 of the list.
 #'       x: Vector of 1 x n simulated data fro sim.GMMdata.R
-#' 
-#' Returns:
+#'
+#' ##############################################################################
+#'
+#' @returns 
 #'   List of 3.
 #'   Maximum likelihood estimates.
 #'   
@@ -31,8 +37,7 @@
 #'         
 #'         Sigma3: 1 x 3 vector, mle of the covariance matrix of the third component of GMM.
 #'         Elements ordered as: same as for Sigma1
-#'     
-#'     
+#'       
 #'     * Element 3 of the list.
 #'         Vector of 1 x 3.
 #'         pi = (pi1,pi2,pi3)
@@ -46,8 +51,10 @@
 #'
 #'
 ############################################################################
-#' Function
-#################################################################
+#'
+#' Begin Function Code
+#'
+############################################################################
 #' @export 
 EM <- function(x, tolerance = 1e-6, max_iter = 1e4){
   
