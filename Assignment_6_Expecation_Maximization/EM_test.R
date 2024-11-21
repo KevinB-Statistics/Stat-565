@@ -30,9 +30,8 @@
 #'         \item Sigma3: 1 x 3 vector, mle of the covariance matrix of the third component of GMM.  Elements ordered as: same as for Sigma1
 #'         }
 #'
-#' - Element 3 of the list.
+#' - Element 3 of the list. Vector of 1 x 3. pi = (pi1,pi2,pi3)
 #' \itemize{
-#'         \item Vector of 1 x 3. pi = (pi1,pi2,pi3)
 #'         \item pi1: scalar, mle of the mixing probability for the first component of GMM.
 #'         \item pi2: scalar, mle of the mixing probability for the second component of GMM.
 #'         \item pi3: scalar, mle of the mixing probability for the third component of GMM.
