@@ -10,7 +10,7 @@
 #' - Element 2: `x` (numeric matrix) of 1 x n simulated data from sim.GMMdata.R
 #'
 #' @param x A list containing 2 elements as described in the details section
-#' @param tolerance Numeric value specifying the convergence tolerance for the EM #' algorithm (epsilon, default = 1e-6)
+#' @param tolerance Numeric value specifying the convergence tolerance for the EM (epsilon, default = 1e-6)
 #' @param max_iter an integer specifying maximum number of iterations (default = 1e4)
 #'
 #' @returns
@@ -30,20 +30,32 @@
 #'         \item Sigma3: 1 x 3 vector, mle of the covariance matrix of the third component of GMM.  Elements ordered as: same as for Sigma1
 #'         }
 #'
-#' - Element 3 of the list. Vector of 1 x 3. pi = (pi1,pi2,pi3)
+#' - Element 3 of the list.
 #' \itemize{
+#'         \item Vector of 1 x 3. pi = (pi1,pi2,pi3)
 #'         \item pi1: scalar, mle of the mixing probability for the first component of GMM.
 #'         \item pi2: scalar, mle of the mixing probability for the second component of GMM.
 #'         \item pi3: scalar, mle of the mixing probability for the third component of GMM.
 #'         }
 #'
-#'  @examples
+#' @examples
+#' # Create input data for function
+#' # 'x' is a list with:
+#' #  1. A tolerance value (epsilon)
+#' #  2. Simulated data matrix
 #'
-#'  data <- list(rnorm(100, 0, 1), rnorm(100, 0, 1)) # simulate data
+#' # Simulate data
+#' dmatrix <- matrix(rnorm(200, 0, 1), nrow = 100, ncol = 2)
+#' data <- list(epsilon = 1e-6, dmatrix)
 #'
-#'  result <- EM(x = data, tolerance = 1e-5, max_iter = 1000) # run EM function
+#' # Run the EM algorithm with default parameters
+#' result_default <- EM(x = data)
+#' print(result_default)
 #'
-#'  result # review output
+#' # Run the EM algorithm with custom parameters
+#' result_custom <- EM(x = data, tolerance = 1e-4, max_iter = 5000)
+#' print(result_custom)
+#'
 #'
 #' ##########################################################################
 #' @export
